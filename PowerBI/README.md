@@ -1,6 +1,6 @@
 # Airlines
 
-### [Dashboard de Reclamos](https://bit.ly/reclamosView)
+### [Reporte de Reclamos](https://bit.ly/reclamosView)
 
 ## Problem Statement
 
