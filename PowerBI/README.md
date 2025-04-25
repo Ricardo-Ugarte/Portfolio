@@ -56,6 +56,3 @@ Para resolver este problema, diseñé una solución compuesta por:
 - Acceso web inmediato para supervisores, sin necesidad de pedir reportes manuales.
 - Conservación del historial completo y trazabilidad de los reclamos.
 
--
-
-
