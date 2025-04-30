@@ -1,7 +1,6 @@
 # 📈 Reporte de Ventas e Inventario
 
-### 🛍️ Análisis completo de ventas por modelo, proveedor, utilidad, rotación e inventario actualizado  
-> Visualizado en Power BI a partir de una base de datos previamente gestionada solo con Excel
+### 🔗 [Reporte en Power BI](https://bit.ly/reclamosView)
 
 ---
 
