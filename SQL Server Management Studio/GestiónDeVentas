@@ -1,0 +1,90 @@
+// BASE DE DATOS: Gestión de Ventas (Esquema Estrella con multi-empresa)
+// Autor: Ricardo Ugarte
+// Descripción: Modelo en estrella para análisis de ventas, compras, stock y gestión multiempresa
+
+// ======= Tabla de hechos (ventas) =======
+
+Table HechosVentas {
+  IdVenta int [pk, increment, note: 'ID único de la venta']
+  EmpresaKey int [not null, ref: > DimEmpresa.IdEmpresa, note: 'Clave de empresa']
+  FechaKey date [not null, note: 'Clave de fecha de la venta']
+  ProductoKey varchar(20) [not null, ref: > DimProducto.Cod, note: 'Clave de producto']
+  ClienteKey int [not null, ref: > DimCliente.IdCliente, note: 'Clave de cliente']
+  VendedorKey int [not null, ref: > DimVendedor.IdVendedor, note: 'Clave de vendedor']
+  FacturaKey int [not null, ref: > Facturas.IdFactura, note: 'Clave de factura relacionada']
+  CantidadVendida int [not null, note: 'Unidades vendidas']
+  PrecioUnitario decimal(10,2) [not null, note: 'Precio unitario de venta']
+  TotalVenta decimal(10,2) [not null, note: 'Monto total de la venta']
+}
+
+// ======= Tabla de hechos (compras) =======
+
+Table HechosCompras {
+  IdCompra int [pk, increment, note: 'ID único de la compra (detalle de factura)']
+  EmpresaKey int [not null, ref: > DimEmpresa.IdEmpresa, note: 'Clave de empresa']
+  FacturaKey int [not null, ref: > Facturas.IdFactura, note: 'Clave de factura']
+  ProductoKey varchar(20) [not null, ref: > DimProducto.Cod, note: 'Clave de producto comprado']
+  CantidadComprada int [not null, note: 'Cantidad comprada']
+  Neto decimal(12,2) [not null, note: 'Importe neto del producto']
+  Impuestos decimal(12,2) [not null, note: 'Impuestos aplicados al producto']
+  Subtotal decimal(12,2) [not null, note: 'Subtotal por producto']
+  GastosEnvio decimal(12,2) [note: 'Gastos de envío asignados al producto']
+  CostoTotal decimal(12,2) [not null, note: 'Costo total del producto']
+  PrecioUnitario decimal(10,2) [not null, note: 'Precio unitario del producto']
+}
+
+// ======= Tablas de dimensiones =======
+
+Table DimEmpresa {
+  IdEmpresa int [pk, increment, note: 'ID único de la empresa']
+  Nombre nvarchar(100) [not null, note: 'Nombre de la empresa']
+  Direccion nvarchar(200) [note: 'Dirección de la empresa']
+  Telefono varchar(20) [note: 'Teléfono de contacto']
+  Email varchar(100) [note: 'Correo electrónico']
+}
+
+Table DimProducto {
+  Cod varchar(20) [pk, note: 'Código del producto']
+  Descripcion nvarchar(100) [not null, note: 'Descripción del producto']
+  UM varchar(10) [note: 'Unidad de medida']
+  PrecioCompra decimal(10,2) [note: 'Precio unitario de compra']
+  PrecioVenta decimal(10,2) [note: 'Precio unitario de venta']
+}
+
+Table DimCliente {
+  IdCliente int [pk, increment, note: 'ID único del cliente']
+  Nombre nvarchar(100) [not null, note: 'Nombre del cliente']
+  Telefono varchar(20) [note: 'Teléfono del cliente']
+  Email varchar(100) [note: 'Correo electrónico del cliente']
+}
+
+Table DimVendedor {
+  IdVendedor int [pk, increment, note: 'ID único del vendedor']
+  Nombre nvarchar(100) [not null, note: 'Nombre del vendedor']
+  Telefono varchar(20) [note: 'Teléfono del vendedor']
+  Email varchar(100) [note: 'Correo electrónico del vendedor']
+}
+
+Table DimProveedor {
+  IdProveedor int [pk, increment, note: 'ID único del proveedor']
+  Nombre nvarchar(100) [not null, note: 'Nombre del proveedor']
+  Telefono varchar(20) [note: 'Teléfono de contacto']
+  Email varchar(100) [note: 'Correo electrónico del proveedor']
+}
+
+Table Facturas {
+  IdFactura int [pk, increment, note: 'ID único de la factura']
+  EmpresaKey int [not null, ref: > DimEmpresa.IdEmpresa, note: 'Clave de empresa']
+  NumeroFactura varchar(20) [not null, note: 'Número de la factura']
+  FechaEmision date [not null, note: 'Fecha de emisión de la factura']
+  FechaRecepcion date [note: 'Fecha de recepción de la factura']
+  IdProveedor int [not null, ref: > DimProveedor.IdProveedor, note: 'Proveedor de la factura']
+  ImporteNeto decimal(12,2) [not null, note: 'Importe neto de la factura']
+  GastosEnvio decimal(12,2) [note: 'Gastos de envío de la factura']
+  ImpuestosInternos decimal(12,2) [note: 'Impuestos internos']
+  IVA_CF decimal(12,2) [note: 'IVA crédito fiscal']
+  PercepcionIVA decimal(12,2) [note: 'Percepción de IVA']
+  PercepcionIIBB decimal(12,2) [note: 'Percepción de IIBB']
+  TotalFactura decimal(12,2) [not null, note: 'Total de la factura']
+}
+
