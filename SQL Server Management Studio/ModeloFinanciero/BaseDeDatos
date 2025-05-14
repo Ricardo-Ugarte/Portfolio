@@ -1,0 +1,120 @@
+-- BASE DE DATOS: Modelo Financiero
+-- Autor: Ricardo Ugarte
+-- Esquema estrella para análisis de transacciones, amortizaciones y garantías
+
+IF DB_ID('ModeloFinanciero') IS NULL
+    CREATE DATABASE ModeloFinanciero;
+GO
+
+USE ModeloFinanciero;
+GO
+
+-- =============================================
+-- DIMENSIONES
+-- =============================================
+
+CREATE TABLE DimFecha (
+    Fecha DATE PRIMARY KEY,
+    Año INT,
+    Mes INT,
+    Dia INT,
+    NombreMes NVARCHAR(20),
+    Trimestre INT
+);
+
+CREATE TABLE DimCliente (
+    IdCliente INT PRIMARY KEY IDENTITY(1,1),
+    Nombre NVARCHAR(100),
+    Pais NVARCHAR(50),
+    Segmento NVARCHAR(50)
+);
+
+CREATE TABLE DimProducto (
+    CodProducto VARCHAR(20) PRIMARY KEY,
+    Descripcion NVARCHAR(100),
+    TipoProducto NVARCHAR(50),
+    Clasificacion NVARCHAR(50),
+    PrecioBase DECIMAL(18,2)
+);
+
+CREATE TABLE DimCompañia (
+    IdCompañia INT PRIMARY KEY IDENTITY(1,1),
+    NombreCompañia NVARCHAR(100),
+    Industria NVARCHAR(50),
+    Region NVARCHAR(50)
+);
+
+CREATE TABLE DimMoneda (
+    IdMoneda INT PRIMARY KEY IDENTITY(1,1),
+    Moneda NVARCHAR(50),
+    Simbolo VARCHAR(10),
+    TipoCambioUSD DECIMAL(18,4)
+);
+
+CREATE TABLE DimCuentaContable (
+    IdCuenta INT PRIMARY KEY IDENTITY(1,1),
+    Cuenta NVARCHAR(100),
+    Categoria NVARCHAR(50),
+    SubCategoria NVARCHAR(50)
+);
+
+CREATE TABLE DimCentroCosto (
+    IdCentroCosto INT PRIMARY KEY IDENTITY(1,1),
+    NombreCentro NVARCHAR(100),
+    Area NVARCHAR(50)
+);
+
+-- =============================================
+-- HECHOS
+-- =============================================
+
+CREATE TABLE FactTransacciones (
+    IdTransaccion INT PRIMARY KEY IDENTITY(1,1),
+    Fecha DATE NOT NULL,
+    IdCliente INT NOT NULL,
+    IdProducto VARCHAR(20) NOT NULL,
+    IdCompañia INT NOT NULL,
+    IdMoneda INT NOT NULL,
+    IdCuenta INT NOT NULL,
+    IdCentroCosto INT NOT NULL,
+    Monto DECIMAL(18,2) NOT NULL,
+    TipoTransaccion NVARCHAR(50),
+
+    FOREIGN KEY (Fecha) REFERENCES DimFecha(Fecha),
+    FOREIGN KEY (IdCliente) REFERENCES DimCliente(IdCliente),
+    FOREIGN KEY (IdProducto) REFERENCES DimProducto(CodProducto),
+    FOREIGN KEY (IdCompañia) REFERENCES DimCompañia(IdCompañia),
+    FOREIGN KEY (IdMoneda) REFERENCES DimMoneda(IdMoneda),
+    FOREIGN KEY (IdCuenta) REFERENCES DimCuentaContable(IdCuenta),
+    FOREIGN KEY (IdCentroCosto) REFERENCES DimCentroCosto(IdCentroCosto)
+);
+
+CREATE TABLE FactAmortizaciones (
+    IdAmortizacion INT PRIMARY KEY IDENTITY(1,1),
+    Fecha DATE NOT NULL,
+    IdCliente INT NOT NULL,
+    IdProducto VARCHAR(20) NOT NULL,
+    IdMoneda INT NOT NULL,
+    CapitalInicial DECIMAL(18,2),
+    CapitalPendiente DECIMAL(18,2),
+    InteresPagado DECIMAL(18,2),
+
+    FOREIGN KEY (Fecha) REFERENCES DimFecha(Fecha),
+    FOREIGN KEY (IdCliente) REFERENCES DimCliente(IdCliente),
+    FOREIGN KEY (IdProducto) REFERENCES DimProducto(CodProducto),
+    FOREIGN KEY (IdMoneda) REFERENCES DimMoneda(IdMoneda)
+);
+
+CREATE TABLE FactGarantias (
+    IdGarantia INT PRIMARY KEY IDENTITY(1,1),
+    Fecha DATE NOT NULL,
+    IdCliente INT NOT NULL,
+    IdProducto VARCHAR(20) NOT NULL,
+    ValorGarantia DECIMAL(18,2),
+    TipoGarantia NVARCHAR(50),
+    Estado NVARCHAR(50),
+
+    FOREIGN KEY (Fecha) REFERENCES DimFecha(Fecha),
+    FOREIGN KEY (IdCliente) REFERENCES DimCliente(IdCliente),
+    FOREIGN KEY (IdProducto) REFERENCES DimProducto(CodProducto)
+);
