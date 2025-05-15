@@ -65,7 +65,7 @@ El botón **Registrar Venta** guarda la operación y descuenta el stock automát
 
 ---
 
-## 🧠 Funcionalidades implementadas
+## 📈 Funcionalidades implementadas
 
 - Validación de stock en tiempo real antes de permitir la venta.
 - Registro de múltiples artículos por factura de compra.
