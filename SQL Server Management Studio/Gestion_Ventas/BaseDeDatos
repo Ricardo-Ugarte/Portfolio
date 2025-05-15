@@ -1,0 +1,81 @@
+Script SQL
+
+CREATE TABLE [DimEmpresa] (
+  [IdEmpresa] int PRIMARY KEY IDENTITY(1, 1),
+  [Nombre] nvarchar(100) NOT NULL,
+  [Direccion] nvarchar(200),
+  [Telefono] varchar(20),
+  [Email] varchar(100)
+);
+
+CREATE TABLE [DimProducto] (
+  [Cod] varchar(20) PRIMARY KEY,
+  [Descripcion] nvarchar(100) NOT NULL,
+  [UM] varchar(10),
+  [PrecioCompra] decimal(10,2),
+  [PrecioVenta] decimal(10,2)
+);
+
+CREATE TABLE [DimCliente] (
+  [IdCliente] int PRIMARY KEY IDENTITY(1, 1),
+  [Nombre] nvarchar(100) NOT NULL,
+  [Telefono] varchar(20),
+  [Email] varchar(100)
+);
+
+CREATE TABLE [DimVendedor] (
+  [IdVendedor] int PRIMARY KEY IDENTITY(1, 1),
+  [Nombre] nvarchar(100) NOT NULL,
+  [Telefono] varchar(20),
+  [Email] varchar(100)
+);
+
+CREATE TABLE [DimProveedor] (
+  [IdProveedor] int PRIMARY KEY IDENTITY(1, 1),
+  [Nombre] nvarchar(100) NOT NULL,
+  [Telefono] varchar(20),
+  [Email] varchar(100)
+);
+
+CREATE TABLE [Facturas] (
+  [IdFactura] int PRIMARY KEY IDENTITY(1, 1),
+  [EmpresaKey] int NOT NULL,
+  [NumeroFactura] varchar(20) NOT NULL,
+  [FechaEmision] date NOT NULL,
+  [FechaRecepcion] date,
+  [IdProveedor] int NOT NULL,
+  [ImporteNeto] decimal(12,2) NOT NULL,
+  [GastosEnvio] decimal(12,2),
+  [ImpuestosInternos] decimal(12,2),
+  [IVA_CF] decimal(12,2),
+  [PercepcionIVA] decimal(12,2),
+  [PercepcionIIBB] decimal(12,2),
+  [TotalFactura] decimal(12,2) NOT NULL
+);
+
+CREATE TABLE [HechosVentas] (
+  [IdVenta] int PRIMARY KEY IDENTITY(1, 1),
+  [EmpresaKey] int NOT NULL,
+  [FechaKey] date NOT NULL,
+  [ProductoKey] varchar(20) NOT NULL,
+  [ClienteKey] int NOT NULL,
+  [VendedorKey] int NOT NULL,
+  [FacturaKey] int NOT NULL,
+  [CantidadVendida] int NOT NULL,
+  [PrecioUnitario] decimal(10,2) NOT NULL,
+  [TotalVenta] decimal(10,2) NOT NULL
+);
+
+CREATE TABLE [HechosCompras] (
+  [IdCompra] int PRIMARY KEY IDENTITY(1, 1),
+  [EmpresaKey] int NOT NULL,
+  [FacturaKey] int NOT NULL,
+  [ProductoKey] varchar(20) NOT NULL,
+  [CantidadComprada] int NOT NULL,
+  [Neto] decimal(12,2) NOT NULL,
+  [Impuestos] decimal(12,2) NOT NULL,
+  [Subtotal] decimal(12,2) NOT NULL,
+  [GastosEnvio] decimal(12,2),
+  [CostoTotal] decimal(12,2) NOT NULL,
+  [PrecioUnitario] decimal(10,2) NOT NULL
+);
