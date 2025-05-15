@@ -1,6 +1,6 @@
 # 📱 Aplicación de Registro y ventas en Power Apps
 
-Esta aplicación la desarrollé en **Microsoft Power Apps** con el objetivo de digitalizar el proceso completo de **gestión de stock, compras, ventas y proveedores**, para un empresa de venta de alimentos y licores.
+Esta aplicación la desarrollé en **Microsoft Power Apps** con el objetivo de automatizar el proceso completo de **gestión de stock, compras, ventas y proveedores**, para un empresa de venta de alimentos y licores.
 
 ---
 
